@@ -1,0 +1,61 @@
+//Divide a number by dividend without using division, multiplication or modulo operator
+// Range of answer must be within [-2^31 to 2^31-1]
+
+
+Approach1: 
+public int divide(int dividend, int divisor) {
+    // Count the number of negatives + convert parameters to positives.
+    int negatives = 0;
+    if (dividend < 0) {
+        negatives++;
+        dividend = -dividend;
+    }
+    if (divisor < 0) {
+        negatives++;
+        divisor = -divisor;
+    }
+
+    // Count the number of subtractions.
+    int subtractions = 0;
+    while (dividend - divisor >= 0) {
+        subtractions++;
+        dividend -= divisor;
+    }
+
+    // Convert back to negative if needed.
+    if (negatives == 1) {
+        subtractions = -subtractions;
+    }
+
+    return subtractions;
+}
+
+//Linear Search is too slow because at each step, we only subtract one copy of the divisor from the dividend.
+//A better way would be to try and subtract multiple copies of the divisor each time.
+//One way of quickly increasing numbers, without using multiplication, is to double them repeatedly. So let's try doubling the divisor until it no longer fits into the dividend.
+//O(n) ---> if divided by 1, then have to subtract dividend number of times. Not optimal.
+//Hence approach2 where exponential
+
+Approach2: 
+
+int quotient = 0;
+/* Once the divisor is bigger than the current dividend,
+ * we can't fit any more copies of the divisor into it. */
+while (dividend >= divisor) {
+    /* Now that we're in the loop, we know it'll fit at least once as
+     * divivend >= divisor */
+    int powerOfTwo = 1;
+    int value = divisor;
+    /* Check if double the current value is too big. If not, continue doubling.
+     * If it is too big, stop doubling and continue with the next step */
+    while (value + value < dividend) {
+        value += value;
+        powerOfTwo += powerOfTwo;
+    }
+    // We have been able to subtract divisor another powerOfTwo times.
+    quotient += powerOfTwo;
+    // Remove value so far so that we can continue the process with remainder.
+    dividend -= value;
+}
+
+return quotient;
