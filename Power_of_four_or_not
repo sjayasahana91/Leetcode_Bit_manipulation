@@ -1,0 +1,18 @@
+//To check if a number is a power of 4 or not
+// Power of 4s have 1 in even positions whereas powers of 2 which are not powers of 4 have 1 in even positions
+// So, we check if it's a power of 2 and we AND with 0xAAAAAAAA to make sure it doesn't have 1 in odd position
+
+#include <stdio.h>
+#include <stdbool.h>
+
+bool is_power_of_four(int num)
+{
+  bool output = false;
+  if(num>0 && ((num&(num-1))==0) && ((num&0xAAAAAAAA) == 0))
+  {
+    output = true;
+    printf("True");
+  }
+  return output;
+}
+
