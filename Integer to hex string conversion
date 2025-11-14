@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+// To execute C, please define "int main()"
+
+char* int_to_hex(int num)
+{
+  static char output[9]={"0"};
+  char hex_char[16] ="0123456789ABCDEF";
+
+  int i=0;
+  while(num !=0)
+  {
+    int byte = num & 15;
+    output[i]=hex_char[byte];
+    i++;
+    num = num>>4;
+  }
+
+  int total_len = i;
+  for(int j=0;j<total_len/2;j++)
+  {
+    char temp = output[j];
+    output[j] = output[total_len-j-1];
+    output[total_len-j-1]=temp;
+  }
+  output[total_len]='\0';
+
+  return output;
+}
+int main() {
+    printf("output hex string:0x%s \n",int_to_hex((int)65534));
+  return 0;
+}
