@@ -5,7 +5,7 @@
 //Find the number that occurs twice and the number that is missing and return them in the form of an array.
 
 
-Sort and then iterate through the sequence: say 1 2 3 3 5 6 7 8 9 10
+Sort and then iterate through the sequence: say 1 2 3 3 5 6 7 8 9 10 ====> return ouput as 3(duplicate),4(missing number)
 two subsequent entries are same => duplicate
 one entry is greater than prev entry+1, missing entry = curr entry - 1
 
