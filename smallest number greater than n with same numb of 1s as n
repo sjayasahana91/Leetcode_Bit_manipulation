@@ -1,0 +1,47 @@
+//Given a positive 32-bit integer n, find the smallest integer > n that has the same number of set bits (1s) in its binary representation.
+//If no such number exists within 32 bits, return -1
+
+#include <stdint.h>
+#include <limits.h>
+
+int32_t next_with_same_ones(int32_t n)
+{
+    if (n <= 0) return -1;
+
+    uint32_t x = (uint32_t)n;
+
+    int c0 = 0;
+    int c1 = 0;
+
+    // count trailing zeros
+    while (((x & 1u) == 0u) && x != 0u) {
+        c0++;
+        x >>= 1;
+    }
+
+    // count ones
+    while ((x & 1u) == 1u) {
+        c1++;
+        x >>= 1;
+    }
+
+    int p = c0 + c1;  // position of rightmost non-trailing zero
+
+    // if n is like 111..1100..00, there is no larger with same popcount within 32 bits
+    if (p == 31 || p == 0) {
+        return -1;
+    }
+
+    uint32_t orig = (uint32_t)n;
+
+    // Step 1: set bit p
+    orig |= (1u << p);
+
+    // Step 2: clear all bits to the right of p
+    orig &= ~((1u << p) - 1u);
+
+    // Step 3: put (c1-1) ones at the lowest bits
+    orig |= (1u << (c1 - 1)) - 1u;
+
+    return (int32_t)orig;
+}
