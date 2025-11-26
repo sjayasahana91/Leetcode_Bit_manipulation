@@ -1,3 +1,4 @@
+\\COmmon prefix between the left and the right numbers will give the AND of the two numbers
 class Solution {
 public:
     int rangeBitwiseAnd(int m, int n) {
