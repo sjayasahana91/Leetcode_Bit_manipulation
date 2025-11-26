@@ -1,0 +1,42 @@
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX(a,b)  (a>b ? a:b)
+int get_max_prod_indices(const char *a[], int num)
+{
+  int bitmask[num];
+  int str_len[num];
+  for(int i=0; i< num; i++)
+  {
+    int len = strlen(a[i]);
+    str_len[i] = len;
+    for(int j=0;j<len;j++)
+    {
+      bitmask[i] |= (1u << ((int)a[i][j] - (int)'a'));
+    }
+    printf("String: %s, bitmask: 0x%x, strlen: %d \n", a[i], bitmask[i], str_len[i]);
+  }
+  int max_prod = 0;
+  for(int i=0; i<num; i++)
+  {
+    for(int j=i+1; j<num; j++)
+    {
+      if((bitmask[i] & bitmask[j]) == 0)
+      {
+        max_prod = MAX(max_prod, str_len[i] * str_len[j]);
+      }
+    }
+  }
+  return max_prod;
+}
+
+
+int main ()
+{
+  const char *a[] = {"abcd", "efg", "abij", "xyz"};
+  int max_prod = get_max_prod_indices(a, sizeof(a)/sizeof(char*));
+
+  printf("Max_prod: %d", max_prod);
+  return 0;
+}
