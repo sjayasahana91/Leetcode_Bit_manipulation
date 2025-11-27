@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int sum_of_two_integers(int a, int b)
+{
+  // We always want x to be greater than y for this method to work
+  int x = 0, y = 0;
+  (a>b) ? (x=a,y=b):(x=b,y=a);
+  int sign = (x>0)?1:-1;
+  x =abs(x); y= abs(y);
+  if(a*b > 0)
+  {
+    int sum_without_carry = 0, carry = 0;
+    while(y!=0)
+    {
+      sum_without_carry = x^y;
+      carry = (x&y) << 1;
+      x = sum_without_carry;
+      y = carry;
+    }
+  }
+  else {
+    int diff_without_borrow = 0, borrow = 0;
+    while(y!=0)
+    {
+      diff_without_borrow = x^y;
+      borrow = ((~x) & y) <<1;
+
+      x = diff_without_borrow;
+      y = borrow;
+    }
+  }
+  return (x*sign);
+}
+
+int diff_of_two_integers(int x, int y)
+{
+  
+  return x;
+}
+
+int main() {
+  int a=-10, b=30;
+  printf("Sum of two integers %d and %d: %d \n",a,b, sum_of_two_integers(a,b));
+  return 0;
+}
