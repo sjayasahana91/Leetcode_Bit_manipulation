@@ -1,0 +1,64 @@
+// Generalized abbreviation - We are given a string word of N lowercase English letters. 
+//Our task is to choose any number of non-overlapping and non-adjacent substrings from the string and replace them with their length, resulting in an abbreviated string 
+//of the original one.
+
+//For example, given the string abcde, we can choose substrings bc and e, replacing bc with 2 and e with 1, resulting in the abbreviated string a2d1. 
+//Note that substrings like bc and cd are invalid because they are adjacent, and substrings like abc and cd are invalid because they overlap.
+
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+char** get_all_substr(const char *str)
+{
+  int len = strlen(str);
+  int num_substr = 1<<len;
+  char **substr = malloc(num_substr * sizeof(*substr));
+  for(int i=0; i<num_substr; i++)
+  {
+    char *buff = malloc((len*2) * sizeof(char));
+    int count=0;
+    int curr = i;
+    int idx =0;
+    for(int j=0;j<len;j++)
+    {
+      if(curr&1)
+      {
+        count++;
+      }
+      else {
+        if(count)
+        {
+          sprintf(&buff[idx],"%d",count);
+          idx++;
+          count=0;
+        }
+        buff[idx] = str[j]; idx++;
+      } 
+      curr >>=1;
+  }
+  if(count)
+  {
+    sprintf(&buff[idx],"%d",count);
+    count=0;
+    idx++;
+  }
+  buff[idx] = '\0';
+  substr[i] = buff;
+}
+return substr;
+}
+
+int main (void)
+{
+  const char a[] = "abcde";
+  char **substr_arr = get_all_substr(a);
+
+  int num_substr = 1u<<strlen(a);
+  for(int i=0;i<num_substr;i++)
+  {
+    printf("Substr[%d]: %s \n", i, substr_arr[i]);
+  }
+  return 0;
+}
