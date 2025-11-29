@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <string.h>
+
+int longest_comm_prefix(char *str_arr[], int len, char* com_pref)
+{
+  int i=0,j=0;
+  char com_prefix[10];
+  com_prefix[0] = '\0';
+  while(str_arr[0][j] != '\0')
+  {
+    char curr_char = str_arr[0][j];
+    for(i=1;i<len;i++)
+    {
+      if(curr_char != str_arr[i][j])
+      {
+        break;
+      }
+    }
+    if(i==len)
+    {
+      com_prefix[j] = curr_char;
+      j++;
+    }
+    else
+    {
+      break;
+    }
+    com_prefix[j] = '\0';
+  }
+  strcpy(com_pref, com_prefix);
+  return 1;
+}
+// To execute C, please define "int main()"
+
+int main() {
+  char *str_arr[] = {"abcdef", "abcdghj", "abcnhoi"};
+  char comm_pref[10] = {0};
+  if(longest_comm_prefix(str_arr,3, comm_pref))
+  {
+    printf("longest comm prefix: %s", comm_pref);
+  }
+  
+  return 0;
+}
