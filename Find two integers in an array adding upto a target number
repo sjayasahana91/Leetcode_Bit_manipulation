@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+typedef struct node{
+  int key;
+  int value;
+  struct node *next;
+}node;
+#define TABLE_SIZE 10
+node *table[TABLE_SIZE];
+
+int index(int key)
+{
+  int idx = key % TABLE_SIZE;
+  return idx;
+}
+
+void insert(int key, int value)
+{
+  int idx = index(key);
+
+  node *new = malloc(sizeof(node));
+
+  new->key = key;
+  new->value = value;
+  new->next = table[idx];
+  table[idx] = new;
+}
+void print_hash()
+{
+  for(int i =0;i<TABLE_SIZE;i++)
+  {
+    printf("bucket[%d]:\n",i);
+    node *curr = table[i];
+    while(curr)
+    {
+      printf("key:%d, value:%d \n", curr->key, curr->value);
+      curr = curr->next;
+    }
+  }
+  printf("\n \n");
+}
+
+node* search(int key)
+{
+  int idx = index(key);
+  node *curr = table[idx];
+  while(curr)
+  {
+    if(curr->key == key)
+    {
+      return curr;
+    }
+    curr = curr->next;
+  }
+  return NULL;
+
+}
+int get_indices_that_sum_to_target(int *a, int len, int *i, int *j, int target)
+{
+  for(int k=0;k<len;k++)
+  {
+    insert(a[k],k);
+    print_hash();
+    node *complement = search(target - a[k]); 
+    if(complement)
+    {
+      *i = k;
+      *j = complement->value;
+      return true;
+    }
+  }
+  print_hash();
+  return false;
+}
+// To execute C, please define "int main()"
+
+int main() {
+  int a[5] = {85,3,145,20, 10};
+  int target = 13;
+  int i=0,j=0;
+  if(get_indices_that_sum_to_target(a, 5, &i,&j, target))
+  {
+    printf("element1: %d, element2 =%d", a[i], a[j]);
+  }
+  
+  return 0;
+}
