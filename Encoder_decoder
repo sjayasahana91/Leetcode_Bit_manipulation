@@ -1,0 +1,58 @@
+There was this encoder and decoder question for a company's initial assessment where bytes need to be encoded into a 64bit vairiable 
+
+int encode(uint8_t* byte, uint64_t output)
+
+int decode(uint64_t input, uint8_t* byte)
+
+The number of bytes encoded or decoded is what is returned.
+The MSB in each byte is 1 when there is more bytes to follow
+the next byte includes the previous byte's MSB as it's LSB. 
+
+
+
+int encode(uint8_t* byte, uint64_t *output)
+{
+  int i=0;
+  while(byte[i])
+  {
+    uint64_t curr_byte = (uint64_t)byte[i];
+    *output |= (curr_byte << (7*i));
+    i++;
+    if((curr_byte & 0x80) == 0)
+    {
+      break;
+    }
+  }
+  return i;
+}
+
+int decode(uint64_t input, uint8_t* byte)
+{
+  int i=0;
+  while (input)
+  {
+     int curr_byte = input & 0xFF;
+     byte[i] = (uint8_t)curr_byte;
+     i++;
+     if((curr_byte & 0x80) == 0)
+     { break;} 
+     input >>= 7;
+  }
+  return i;
+}
+
+int main() {
+  
+  int i=0;
+  uint8_t byte[10]={0};
+  i = decode(0x2D880, byte);
+  for(int j=0;j<i;j++)
+  {
+    printf("byte[%d]: 0x%x \n", j, byte[j]);
+  }
+  
+  uint64_t enc_output;
+  i=encode(byte, &enc_output);
+  printf("encoded output: 0x%lx", enc_output);
+  return 0;
+}
